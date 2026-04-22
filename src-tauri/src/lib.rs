@@ -17,7 +17,7 @@ pub struct AudioState(Mutex<Option<AudioManager>>);
 impl AudioState {
     fn with_manager<F, R>(&self, app_handle: &tauri::AppHandle, f: F) -> Result<R, String>
     where
-        F: FnOnce(&AudioManager) -> Result<R, String>,
+        F: FnOnce(&mut AudioManager) -> Result<R, String>,
     {
         // どのスレッドから呼ばれても安全にCOMを操作できるよう、毎回 MTA (Multi-Threaded Apartment) としてCOMを初期化する。
         // S_FALSE（既に初期化済み）が返ることもあるが、気にしない。
@@ -28,7 +28,7 @@ impl AudioState {
             manager.set_app_handle(app_handle.clone());
             *guard = Some(manager);
         }
-        if let Some(manager) = guard.as_ref() {
+        if let Some(manager) = guard.as_mut() {
             f(manager)
         } else {
             Err("Failed to initialize AudioManager".to_string())
@@ -55,6 +55,9 @@ fn set_session_volume(
     volume: f32,
     state: tauri::State<'_, AudioState>,
 ) -> Result<(), String> {
+    if !(0.0..=1.0).contains(&volume) {
+        return Err("Volume must be between 0.0 and 1.0".to_string());
+    }
     state.with_manager(&app, |manager| {
         manager
             .set_session_volume(process_id, volume)

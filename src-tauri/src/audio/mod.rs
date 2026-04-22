@@ -54,6 +54,7 @@ pub struct AudioDeviceInfo {
 pub struct AudioManager {
     device_enumerator: IMMDeviceEnumerator,
     app_handle: Option<tauri::AppHandle>,
+    registered_pids: std::collections::HashSet<u32>,
 }
 
 // IMMDeviceEnumeratorをはじめとするCOMインターフェースは標準ではスレッドセーフ（Send/Sync）とは
@@ -71,6 +72,7 @@ impl AudioManager {
             Ok(Self {
                 device_enumerator,
                 app_handle: None,
+                registered_pids: std::collections::HashSet::new(),
             })
         }
     }
@@ -99,7 +101,7 @@ impl AudioManager {
     }
 
     /// 現在アクティブな全スピーカー（出力デバイス）から、全オーディオセッションの情報を列挙して返す
-    pub fn get_sessions(&self) -> Result<Vec<AudioSessionInfo>> {
+    pub fn get_sessions(&mut self) -> Result<Vec<AudioSessionInfo>> {
         let mut sessions_info = Vec::new();
 
         unsafe {
@@ -156,19 +158,22 @@ impl AudioManager {
 
                         use events::SessionEventsListener;
                         // イベントリスナーの登録 (オプション)
-                        // TODO: 本格的にイベントをUIへ送る場合は、このリスナーインスタンスを保持し続け、
-                        // Unregisterする必要があります。今回は試験的に登録だけおこないます。
-                        if let Ok(control) =
-                            session.cast::<windows::Win32::Media::Audio::IAudioSessionControl>()
-                        {
-                            if let Some(handle) = &self.app_handle {
-                                let listener: windows::Win32::Media::Audio::IAudioSessionEvents =
-                                    SessionEventsListener {
-                                        app_handle: handle.clone(),
-                                        process_id: pid,
+                        // リスナーの重複登録を避けるため、PIDが未登録の場合のみ通知をRegisterする。
+                        if !self.registered_pids.contains(&pid) {
+                            if let Ok(control) =
+                                session.cast::<windows::Win32::Media::Audio::IAudioSessionControl>()
+                            {
+                                if let Some(handle) = &self.app_handle {
+                                    let listener: windows::Win32::Media::Audio::IAudioSessionEvents =
+                                        SessionEventsListener {
+                                            app_handle: handle.clone(),
+                                            process_id: pid,
+                                        }
+                                        .into();
+                                    if control.RegisterAudioSessionNotification(&listener).is_ok() {
+                                        self.registered_pids.insert(pid);
                                     }
-                                    .into();
-                                let _ = control.RegisterAudioSessionNotification(&listener);
+                                }
                             }
                         }
 
@@ -322,7 +327,7 @@ impl AudioManager {
                 // 内部的には IPropertyStore に対して DEVPKEY_Device_FriendlyName を要求する仕組みだが、
                 // COMの汎用型である PROPVARIANT で返ってくるため、Rust側で文字列として安全にデコードして取り出す必要がある。
                 let store: IPropertyStore = device.OpenPropertyStore(STGM_READ)?;
-                let prop_variant =
+                let mut prop_variant =
                     store.GetValue(&DEVPKEY_Device_FriendlyName as *const _ as *const _)?;
 
                 let name = {
@@ -344,6 +349,8 @@ impl AudioManager {
                         "Unknown Device".to_string()
                     }
                 };
+
+                let _ = PropVariantClear(&mut prop_variant);
 
                 devices.push(AudioDeviceInfo {
                     id: id_string,
