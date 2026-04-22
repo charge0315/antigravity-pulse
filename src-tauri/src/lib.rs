@@ -216,6 +216,32 @@ pub fn run() {
                 }
             }
 
+            // --- Phase 6: Peak Level 配信ループ ---
+            let handle = app.handle().clone();
+            std::thread::spawn(move || {
+                use tauri::Emitter;
+                loop {
+                    // 33ms (約30fps) 間隔でピーク値を配信
+                    std::thread::sleep(std::time::Duration::from_millis(33));
+
+                    let state = handle.state::<AudioState>();
+                    let peaks = state.with_manager(&handle, |manager| {
+                        manager.get_peak_levels().map_err(|e| e.to_string())
+                    });
+
+                    if let Ok(peak_data) = peaks {
+                        if !peak_data.is_empty() {
+                            // [{pid, peak}, ...] の形式で送信
+                            let payload: Vec<serde_json::Value> = peak_data
+                                .into_iter()
+                                .map(|(pid, peak)| serde_json::json!({ "pid": pid, "peak": peak }))
+                                .collect();
+                            let _ = handle.emit("audio-pulse", payload);
+                        }
+                    }
+                }
+            });
+
             Ok(())
         })
         .manage(AudioState(Mutex::new(None)))

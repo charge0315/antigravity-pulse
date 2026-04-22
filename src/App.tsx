@@ -19,6 +19,8 @@ interface AudioDevice {
 function App() {
   const [sessions, setSessions] = useState<any[]>([]);
   const [devices, setDevices] = useState<AudioDevice[]>([]);
+  const [peaks, setPeaks] = useState<Record<number, number>>({});
+  const [totalPeak, setTotalPeak] = useState(0);
   const [errorMsg, setErrorMsg] = useState("");
   const [isEntering, setIsEntering] = useState(false);
   const appWindow = getCurrentWindow();
@@ -65,6 +67,19 @@ function App() {
         await appWindow.show();
         await appWindow.setFocus();
       }
+    });
+
+    const unlistenPulse = listen<any[]>("audio-pulse", (event) => {
+      let maxP = 0;
+      setPeaks((prev) => {
+        const next = { ...prev };
+        event.payload.forEach((d: any) => {
+          next[d.pid] = d.peak;
+          if (d.peak > maxP) maxP = d.peak;
+        });
+        return next;
+      });
+      setTotalPeak(maxP);
     });
 
     const unlistenAudio = listen<AudioEventPayload>("audio-session-event", (event: Event<AudioEventPayload>) => {
@@ -154,8 +169,12 @@ function App() {
       className={`flex flex-col h-screen overflow-hidden text-white select-none transition-all duration-300 ${isEntering ? 'window-enter-active' : 'window-enter'}`}
       style={{ background: "transparent" }}
     >
-      {/* 背景オーバーレイ */}
-      <div className="absolute inset-0 bg-black/20 pointer-events-none z-[-1]"></div>
+      {/* 背景オーバーレイ：全体の音量に合わせて青く鼓動する */}
+      <div 
+        className="absolute inset-0 bg-blue-500/10 pointer-events-none z-[-1] transition-opacity duration-100"
+        style={{ opacity: totalPeak * 0.4 }}
+      ></div>
+      <div className="absolute inset-0 bg-black/20 pointer-events-none z-[-2]"></div>
 
       {/* カスタムタイトルバー（ドラッグ可能領域） */}
       <div
@@ -231,11 +250,7 @@ function App() {
                   </div>
 
                   <div className="flex items-center gap-4 relative">
-                    <div className="relative flex-1 flex items-center group/slider">
-                      {/* 
-                          Fluent UI Slider (Custom CSS)
-                          背景の青いトラック（進捗）を表現するためにインラインスタイルで動的グラデーションを使用 
-                      */}
+                    <div className="relative flex-1 flex flex-col justify-center group/slider">
                       <input
                         type="range"
                         min="0" max="1" step="0.01"
@@ -246,6 +261,16 @@ function App() {
                           background: `linear-gradient(to right, #60A5FA ${(session.volume * 100)}%, rgba(255,255,255,0.1) ${(session.volume * 100)}%)`
                         }}
                       />
+                      {/* --- Peak Meter Overlay --- */}
+                      <div className="absolute left-0 bottom-1 w-full h-[2px] bg-white/5 rounded-full overflow-hidden pointer-events-none">
+                        <div 
+                          className="h-full bg-green-400/60 shadow-[0_0_8px_rgba(74,222,128,0.4)]"
+                          style={{ 
+                            width: `${(peaks[session.process_id] || 0) * 100}%`,
+                            transition: 'width 0.05s linear' // わずかな遊びでパタつきを抑える
+                          }}
+                        />
+                      </div>
                     </div>
                     <span className="text-[11px] text-right w-8 text-white/60 font-mono font-bold">
                       {Math.round(session.volume * 100)}
@@ -280,12 +305,18 @@ function App() {
       </div>
       
       {/* 
-          フッター：EarTrumpetらしい、トレイアイコンのような親しみやすさ。 
+          フッター：インジケーターが音量に合わせて強く発光する。 
       */}
       <div className="h-10 px-5 flex items-center justify-between border-t border-white/5 bg-white/[0.02]">
-        <div className="text-[10px] text-white/30 font-medium">ANTIGRAVITY PROTOCOL v3.1</div>
+        <div className="text-[10px] text-white/30 font-medium italic">ANTIGRAVITY PROTOCOL v3.1 // LIVE_PULSE</div>
         <div className="flex gap-4">
-           <div className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]"></div>
+           <div 
+             className="w-1.5 h-1.5 rounded-full bg-green-500 transition-all duration-75"
+             style={{ 
+               boxShadow: `0 0 ${8 + totalPeak * 20}px rgba(34,197,94,${0.4 + totalPeak * 0.6})`,
+               transform: `scale(${1 + totalPeak * 0.5})`
+             }}
+           ></div>
         </div>
       </div>
     </main>

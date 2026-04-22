@@ -9,7 +9,7 @@ use windows::{
         Foundation::{HANDLE, MAX_PATH},
         Media::Audio::{
             eConsole, eRender, IAudioSessionControl2, IAudioSessionEnumerator,
-            IAudioSessionManager2, IMMDevice, IMMDeviceEnumerator, ISimpleAudioVolume,
+            IAudioSessionManager2, IAudioMeterInformation, IMMDevice, IMMDeviceEnumerator, ISimpleAudioVolume,
             MMDeviceEnumerator,
         },
         System::Com::{CoCreateInstance, CoInitializeEx, CLSCTX_ALL, COINIT_MULTITHREADED},
@@ -41,6 +41,7 @@ pub struct AudioSessionInfo {
     pub process_name: String,
     pub volume: f32,
     pub is_muted: bool,
+    pub peak_level: f32, // 追加: リアルタイムのピーク音量レベル (0.0 ~ 1.0)
     pub icon_base64: Option<String>,
     pub device_id: String, // どの出力デバイスに紐づいているかを示す一意のID
 }
@@ -156,6 +157,13 @@ impl AudioManager {
                             }
                         }
 
+                        // ピークレベルの取得 (IAudioMeterInformation)
+                        let peak_level = if let Ok(meter) = session.cast::<IAudioMeterInformation>() {
+                            unsafe { meter.GetPeakValue().unwrap_or(0.0) }
+                        } else {
+                            0.0
+                        };
+
                         use events::SessionEventsListener;
                         // イベントリスナーの登録 (オプション)
                         // リスナーの重複登録を避けるため、PIDが未登録の場合のみ通知をRegisterする。
@@ -203,6 +211,7 @@ impl AudioManager {
                             process_name,
                             volume: vol,
                             is_muted: mute.as_bool(),
+                            peak_level,
                             icon_base64,
                             device_id: device_id.clone(),
                         });
@@ -292,11 +301,42 @@ impl AudioManager {
         Ok(())
     }
 
-    /// 特定のプロセスのオーディオ出力先をルーティング（変更）する
     pub fn set_audio_routing(&self, target_pid: u32, device_id: &str) -> Result<()> {
         let factory = policy::AudioPolicyConfigFactory::new()?;
         factory.set_persisted_default_audio_endpoint(target_pid, device_id)?;
         Ok(())
+    }
+
+    /// 高頻度配信用の軽量メソッド：全アクティブセッションのPIDとピークレベルのみを取得する
+    pub fn get_peak_levels(&self) -> Result<Vec<(u32, f32)>> {
+        let mut peaks = Vec::new();
+        unsafe {
+            let collection = self.get_all_active_render_devices()?;
+            let device_count = collection.GetCount()?;
+
+            for d in 0..device_count {
+                let device = collection.Item(d)?;
+                let session_manager: IAudioSessionManager2 = device.Activate(CLSCTX_ALL, None)?;
+                let enumerator: IAudioSessionEnumerator = session_manager.GetSessionEnumerator()?;
+                let count = enumerator.GetCount()?;
+
+                for i in 0..count {
+                    let session = enumerator.GetSession(i)?;
+                    let control: Result<IAudioSessionControl2> = session.cast();
+
+                    if let Ok(ctrl) = control {
+                        let pid = ctrl.GetProcessId()?;
+                        if pid == 0 { continue; }
+                        
+                        if let Ok(meter) = session.cast::<IAudioMeterInformation>() {
+                            let peak = meter.GetPeakValue().unwrap_or(0.0);
+                            peaks.push((pid, peak));
+                        }
+                    }
+                }
+            }
+        }
+        Ok(peaks)
     }
 
     /// 利用可能なオーディオ出力デバイスのリストを取得する
