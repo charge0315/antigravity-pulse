@@ -41,9 +41,7 @@ function App() {
         const height = 500;
         
         // --- 高度な配置ロジック ---
-        // クリックされたモニターの情報を取得
-        // モニターの有効領域 (WorkArea) を考慮して、タスクバーの位置を推測する
-        const monitor = await appWindow.currentMonitor();
+        const monitor = await (appWindow as any).currentMonitor();
         if (monitor) {
           const { x: clickX, y: clickY } = event.payload;
           const { size: mSize, position: mPos } = monitor;
@@ -98,7 +96,7 @@ function App() {
     });
 
     // ウィンドウがフォーカスを失ったら自動的に閉じる（Windows 11 標準フライアウト挙動）
-    const unlistenBlur = appWindow.onFocusedChanged(({ focused }) => {
+    const unlistenBlur = (appWindow as any).onFocusChanged(({ focused }: { focused: boolean }) => {
       if (!focused) {
         setIsEntering(false);
         setTimeout(() => appWindow.hide(), 200);
@@ -106,9 +104,10 @@ function App() {
     });
 
     return () => {
-      unlistenTray.then(f => f());
-      unlistenAudio.then(f => f());
-      unlistenBlur.then(f => f());
+      unlistenTray.then((f: any) => f());
+      unlistenPulse.then((f: any) => f());
+      unlistenAudio.then((f: any) => f());
+      unlistenBlur.then((f: any) => f());
     };
   }, []);
 
@@ -181,9 +180,12 @@ function App() {
         data-tauri-drag-region
         className="h-12 flex items-center justify-between px-4"
       >
-        <div data-tauri-drag-region className="text-xs font-semibold tracking-widest flex items-center gap-3 text-white/90 uppercase">
-          <div className="w-1 h-4 bg-blue-500 rounded-full"></div>
-          Sound Generator
+        <div data-tauri-drag-region className="text-xs font-bold tracking-widest flex items-center gap-3 text-blue-400 uppercase">
+          <div className="relative w-5 h-5 flex items-center justify-center">
+             <div className="absolute inset-0 bg-blue-500/20 rounded-full animate-pulse"></div>
+             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          Antigravity Pulse
         </div>
         <div className="flex z-50 gap-1">
           <button onClick={() => appWindow.minimize()} className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors">
@@ -308,7 +310,7 @@ function App() {
           フッター：インジケーターが音量に合わせて強く発光する。 
       */}
       <div className="h-10 px-5 flex items-center justify-between border-t border-white/5 bg-white/[0.02]">
-        <div className="text-[10px] text-white/30 font-medium italic">ANTIGRAVITY PROTOCOL v3.1 // LIVE_PULSE</div>
+        <div className="text-[10px] text-white/30 font-medium italic tracking-widest">ANTIGRAVITY // PULSE SYSTEM READY</div>
         <div className="flex gap-4">
            <div 
              className="w-1.5 h-1.5 rounded-full bg-green-500 transition-all duration-75"

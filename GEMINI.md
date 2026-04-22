@@ -29,7 +29,7 @@
 
 ### 🗓️ 2026-02-24: プロジェクト初期セットアップ完了
 - **Tauri v2 + React + Tailwind CSS** の基盤を構築。
-- **Git** リモート設定完了 (GitHub: `charge0315/sound-generator`)。
+- **Git** リモート設定完了 (GitHub: `charge0315/antigravity-pulse`)。
 - **タスクトレイ** の基本機能を Rust で実装（Show/Exit、左クリック連動）。
 - **環境構築**: Rust 1.93.1 と VS Build Tools 18 をセットアップ。
 - **ビルドパス**: `C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools` を使用中。ビルド時は `vcvarsall.bat` のロードが必須。

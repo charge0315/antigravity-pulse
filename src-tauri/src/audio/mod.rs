@@ -8,11 +8,12 @@ use windows::{
     Win32::{
         Foundation::{HANDLE, MAX_PATH},
         Media::Audio::{
-            eConsole, eRender, IAudioSessionControl2, IAudioSessionEnumerator,
-            IAudioSessionManager2, IAudioMeterInformation, IMMDevice, IMMDeviceEnumerator, ISimpleAudioVolume,
+            eRender, IAudioSessionControl2, IAudioSessionEnumerator,
+            IAudioSessionManager2, IMMDeviceEnumerator, ISimpleAudioVolume,
             MMDeviceEnumerator,
+            Endpoints::IAudioMeterInformation,
         },
-        System::Com::{CoCreateInstance, CoInitializeEx, CLSCTX_ALL, COINIT_MULTITHREADED},
+        System::Com::{CoCreateInstance, CLSCTX_ALL},
         System::Threading::{
             OpenProcess, QueryFullProcessImageNameW, PROCESS_NAME_WIN32,
             PROCESS_QUERY_LIMITED_INFORMATION,
@@ -80,14 +81,6 @@ impl AudioManager {
 
     pub fn set_app_handle(&mut self, handle: tauri::AppHandle) {
         self.app_handle = Some(handle);
-    }
-
-    /// デフォルトの再生デバイス（スピーカー等）を取得する
-    fn get_default_render_device(&self) -> Result<IMMDevice> {
-        unsafe {
-            self.device_enumerator
-                .GetDefaultAudioEndpoint(eRender, eConsole)
-        }
     }
 
     /// すべてのアクティブな出力デバイスを取得するヘルパー関数
@@ -159,7 +152,7 @@ impl AudioManager {
 
                         // ピークレベルの取得 (IAudioMeterInformation)
                         let peak_level = if let Ok(meter) = session.cast::<IAudioMeterInformation>() {
-                            unsafe { meter.GetPeakValue().unwrap_or(0.0) }
+                            meter.GetPeakValue().unwrap_or(0.0)
                         } else {
                             0.0
                         };

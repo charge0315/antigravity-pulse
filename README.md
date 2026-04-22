@@ -1,4 +1,4 @@
-# sound-generator
+# Antigravity Pulse
 
 Rust & React (Tauri v2) を使用した、次世代のオーディオコントロール・アプリケーション。
 

@@ -1,7 +1,7 @@
 use std::sync::Mutex;
 use tauri::menu::{Menu, MenuItem};
 use tauri::tray::{TrayIconBuilder, TrayIconEvent};
-use tauri::{Manager, PhysicalPosition, WindowEvent};
+use tauri::{Manager, WindowEvent};
 use window_vibrancy::apply_acrylic;
 
 mod audio;

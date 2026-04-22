@@ -1,4 +1,4 @@
-# Sound Generator Architecture
+# Antigravity Pulse Architecture
 
 このドキュメントは、アプリケーション全体のファイル構造と各モジュールの存在意義・設計方針をまとめています。
 

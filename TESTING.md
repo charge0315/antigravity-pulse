@@ -1,4 +1,4 @@
-# Sound Generator テスト仕様書およびテスト結果報告
+# Antigravity Pulse テスト仕様書およびテスト結果報告
 
 このドキュメントでは、Phase 3 ～ Phase 5 にかけて実装された新機能（Mica/Acrylicエフェクト、Push型音量同期、タスクトレイUI、アプリ連携アイコン抽出、オーディオルーティング）に対する単体テスト・結合テストの項目およびその実行結果を記述します。
 
@@ -28,7 +28,7 @@
 | 項目 | テストケース | 期待される結果 | テスト結果 | 備考 |
 |---|---|---|---|---|
 | 2.1 | 他アプリ起動による検知 | ブラウザ等でYouTubeの音声を再生した際、`Refresh`せず自動的にアプリ一覧に表示されること。 | **OK (Passed)** | `IAudioSessionManager2` およびイベント `AudioSessionStateActive` の発火確認済。 |
-| 2.2 | システムミキサーからの音量変更 | Windows標準の音量ミキサーから該当アプリの音量を変更した際、Sound Generator上のスライダーが即座に追従すること。 | **OK (Passed)** | `OnSimpleVolumeChanged` 経由のTauri Event連携成功。 |
+| 2.2 | システムミキサーからの音量変更 | Windows標準の音量ミキサーから該当アプリの音量を変更した際、Antigravity Pulse上のスライダーが即座に追従すること。 | **OK (Passed)** | `OnSimpleVolumeChanged` 経由のTauri Event連携成功。 |
 | 2.3 | システムミキサーからのミュート操作 | 上記同様にミュートのON/OFF操作に対し、UIのアイコンが即座に追従すること。 | **OK (Passed)** | 〃 |
 | 2.4 | アプリ側の音量変更 (Optimistic UI) | 本アプリのスライダーをすばやくドラッグした際、遅延（カクつき）を感じずスムーズにWindowsシステム側の音量も追従・変更されること。 | **OK (Passed)** | ReactのStateを先行更新する「楽観的UI更新」によりヌルサク動作。 |
 

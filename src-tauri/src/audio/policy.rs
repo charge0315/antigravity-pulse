@@ -1,3 +1,6 @@
+#![allow(non_snake_case)]
+#![allow(non_camel_case_types)]
+
 use windows::core::{Interface, GUID, HRESULT, HSTRING, IUnknown};
 use windows::Win32::System::WinRT::RoGetActivationFactory;
 
