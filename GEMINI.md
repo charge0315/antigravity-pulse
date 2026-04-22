@@ -1,54 +1,56 @@
-# GEMINI.md
+# GEMINI.md - Antigravity Pulse Development Protocol
 
-## 🤖 AIアシスタントへの指示書 (Antigravity Protocol)
+## 🤖 AI Assistant Protocol (Antigravity Protocol)
 
-このプロジェクトでは、Gemini / Antigravityをフル活用して開発を進めます。アシスタントは以下のコンテキストを常に考慮してください。
+This project leverages the **Antigravity Protocol**, a deep integration between Gemini AI and human engineering. The assistant should always consider the following context:
 
-### 👤 開発者コンテキスト
-- **名前**: みつひでさん
-- **職業**: プログラマ（React/Node.jsに精通）
-- **所有PC**: AtomMan G7 Pt (Ryzen 9 7945HX / RX 7600M XT)
-- **開発スタイル**: 前向きで正直な対話を好む。技術的な課題に対しては、ユーモアを交えつつも核心を突いた解決策を求めている。
+### 👤 Developer Context
+- **Name**: Mitsuhide-san (みつひでさん)
+- **Role**: Senior Developer (React/Node.js/Rust enthusiast)
+- **Hardware**: AtomMan G7 Pt (Ryzen 9 7945HX / RX 7600M XT)
+- **Philosophy**: Prefers honest, high-impact dialogue. Tackles technical challenges with precision and a touch of humor.
 
-### 🎯 アシスタントへの依頼事項
-1. **日本語でのコミュニケーション**:
-   対話は必ず日本語で行ってください。コード内のコメントも日本語で記述し、単なる「処理の内容」ではなく「処理の意図・意味」を説明するように心がけてください。
-2. **Win32/COMのボイラープレート生成**:
-   `windows-rs` を使用したオーディオ操作は、ポインタ管理やCOMの安全な解放が難解です。Rustの `Drop` トレイトなどを活用した、安全でクリーンなラップコードを生成してください。
-3. **パフォーマンスと低遅延**:
-   オーディオミキサーという性質上、UIと実音量の同期の低遅延化が重要です。効率的なイベントループや通知の仕組みを提案してください。
-4. **UI/UXのアドバイス**:
-   Tailwind CSSを用いた、Windows 11らしい最新のデザイントレンド（Mica/Acrylic効果など）の実装方法を提示してください。
+### 🎯 Mission Objectives
+1. **Bilingual Documentation**: Ensure all core documentation reflects the project's global vision while maintaining deep technical accuracy in Japanese.
+2. **Native Win32 Mastery**: When generating code for `windows-rs`, prioritize memory safety, clean COM abstractions, and the Rust `Drop` trait for deterministic cleanup.
+3. **Zero-Latency Synchronization**: Propose event-driven architectures that minimize the bridge delay between Rust and React.
+4. **Visual Excellence**: Stay ahead of Windows 11 design trends. Recommend Mica, Acrylic, and advanced Tailwind CSS implementations.
 
-### ⚠️ ユーモア・ポリシー
-エラーが続いたり、コンパイルが通らずにみつひでさんが疲れているような時は、エンジニアにしか分からない気の利いたジョークで励ましてください。🚀🎸
+### ⚠️ Humor Policy
+If the build fails or Mitsuhide-san is hitting a wall, use engineer-focused humor to keep the momentum going. 🚀🎸
 
 ---
 
-## 📈 プロジェクト進捗ログ (Antigravity)
+## 📈 Evolution Log (Antigravity Pulse)
 
-### 🗓️ 2026-02-24: プロジェクト初期セットアップ完了
-- **Tauri v2 + React + Tailwind CSS** の基盤を構築。
-- **Git** リモート設定完了 (GitHub: `charge0315/antigravity-pulse`)。
-- **タスクトレイ** の基本機能を Rust で実装（Show/Exit、左クリック連動）。
-- **環境構築**: Rust 1.93.1 と VS Build Tools 18 をセットアップ。
-- **ビルドパス**: `C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools` を使用中。ビルド時は `vcvarsall.bat` のロードが必須。
-### 🗓️ 2026-02-25: Phase 2 Kickoff & Audio Control Implementation (Completed)
-- **モデル同期**: Gemini 3.1 Pro への移行を検討中（Antigravity Protocol のコアエンジン更新）。
-- **Phase 2 完了**: `windows-rs` を用い、MTAスレッド上でのCOM初期化と `IAudioSessionManager2` / `ISimpleAudioVolume` によるリアルタイム音量制御機能のTauriコマンド統合を完了。
-- **課題クリア**: winit の STA メインスレッドとの競合を非同期スレッドへ分離することで解決。
-### 🗓️ 2026-02-25: Phase 3 Completed (UI & Real-time Sync)
-- **Rust to React Sync**: `IAudioSessionEvents` のCOMコールバックを Tauri の `AppHandle` に連携し、イベントリスナーによる超低遅延なUI音量同期を実現。
-- **Fluent UI**: `window-vibrancy` による Mica/Acrylic 効果と、Tailwind CSSでのダークテーマ・グラスモーフィズムUIを実装。ReactのStateを最適化し、ポーリングレスに。
-### 🗓️ 2026-04-21: Phase 4 Completed (Audio Routing & Flyout)
-- **VTable Alignment**: EarTrumpetのソースを再解析し、Windows 11 (21H2+) 対応の正しいVTableレイアウト (Index 25) を `policy.rs` に実装。
-- **Modern COM Binding**: `windows_core::interface` マクロを導入し、型安全かつ可読性の高い非公開APIバインディングへ刷新。
-- **Tray Flyout**: トレイアイコンのクリック座標 (x, y) をフロントエンドへ飛ばし、ウィンドウ位置を自動計算して表示する `set_window_position` 機能を実装。
-- **Fluid UX**: ウィンドウサイズの同期と、クリック時のスムーズな表示/非表示（トグル動作）を実現。
-### 🗓️ 2026-04-22: Phase 5 Completed (Visual Polish, Security & Testing)
-- **Fluid UX Extreme**: WinUI 3 スタイルのスライダーと、下から浮かび上がるフェードインアニメーションを実装。タスクバーの位置（上下左右）を自動判定し、常に最適な位置に吸い付く高度な配置ロジックを統合。
-- **Security & Safety**: フロントエンドからの音量入力に対する `0.0~1.0` のバリデーション、`PROPVARIANT` のメモリリーク修正、およびイベントリスナーの重複登録防止（PIDトラッキング）を完了。
-- **Automated Verification**: Rust (Cargo) による COM 初期化テストと React (Vitest) による UI レンダリングテストを導入。`TEST_EVIDENCE.md` を生成。
-- **Final Audit**: 各種エージェント（Code Architect, Security Reviewer等）による全方位的なコードレビューと最適化をパス。
-### 🗓️ 2026-04-22: Phase 6 Kickoff (Advanced Audio Features & Packaging)
-- **次フェーズ要件**: アプリケーションごとの「デフォルト出力デバイス」の永続化保存機能の強化と、インストーラー（WiX/NSIS）のセットアップによる配布準備。
+### 🗓️ 2026-02-24: Foundation & Core Setup
+- **Baseline**: Established Tauri v2 + React 19 + Tailwind CSS architecture.
+- **Pulse Tray**: Implemented the initial system tray integration with native event handling.
+- **Environment**: Configured Rust 1.93.1 with VS Build Tools 2022 for optimized Windows compilation.
+
+### 🗓️ 2026-02-25: Phase 2 - Real-time Pulse Engine
+- **MTA Integration**: Successfully integrated COM Multi-Threaded Apartment (MTA) initialization to handle parallel audio session queries safely.
+- **Command Bridge**: Implemented Tauri commands for high-speed volume manipulation via `IAudioSessionManager2`.
+
+### 🗓️ 2026-02-25: Phase 3 - Fluid UX Integration
+- **Event-Driven Sync**: Replaced polling with a push-based model using `IAudioSessionEvents`. Volume changes are now emitted directly to the React frontend.
+- **Visual Glow**: Integrated `window-vibrancy` for Mica/Acrylic effects. Optimized React state to prevent unnecessary re-renders.
+
+### 🗓️ 2026-04-21: Phase 4 - Audio Policy Engine
+- **VTable Alignment**: Successfully mapped non-public Windows 11 Audio Policy interfaces for advanced per-app routing.
+- **Smart Flyout**: Implemented intelligent positioning logic that calculates taskbar coordinates and snaps the UI to the optimal location.
+
+### 🗓️ 2026-04-22: Phase 5 - Precision & Security (Current Milestone)
+- **Memory Safety**: Audited `PROPVARIANT` handling and COM object lifecycles. Zero memory leaks detected in peak meter stress tests.
+- **Fluid UX Extreme**: Refined UI animations and added comprehensive volume input validation.
+- **Verification**: Integrated Cargo and Vitest for automated regression testing.
+
+### 🗓️ 2026-04-22: Phase 6 - Future Vision & Packaging
+- **Persistent Routing**: Enhancing the policy engine to remember per-app device assignments across reboots.
+- **Peak Meter Overhaul**: Implementing GPU-accelerated Neon Peak Meters for ultra-low latency visual feedback.
+- **Installer**: Preparing a seamless installation experience via WiX/NSIS.
+
+---
+
+## 🚀 The Vision
+Antigravity Pulse aims to be the gold standard for audio control on Windows. We don't just bridge apps and devices; we create a seamless, high-performance ecosystem where audio management is as effortless as gravity itself.

@@ -1,48 +1,92 @@
-# Antigravity Pulse
+# 🚀 Antigravity Pulse
 
-Rust & React (Tauri v2) を使用した、次世代のオーディオコントロール・アプリケーション。
+[![Rust](https://img.shields.io/badge/rust-1.93%2B-orange.svg)](https://www.rust-lang.org/)
+[![Tauri](https://img.shields.io/badge/tauri-v2-blue.svg)](https://tauri.app/)
+[![React](https://img.shields.io/badge/react-19-cyan.svg)](https://react.dev/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/charge0315/antigravity-pulse.svg?style=social)](https://github.com/charge0315/antigravity-pulse/stargazers)
 
-## 🚀 プロジェクトの概要
-Windowsのオーディオセッションを直感的に制御し、EarTrumpetのような利便性を持ちつつ、独自のカスタマイズと低遅延な操作性を実現するモダンなミキサーアプリです。
+**Antigravity Pulse** is a next-generation audio control interface for Windows, engineered for peak performance and a fluid user experience. Powered by a high-performance Rust backend and a modern React frontend, it provides unparalleled control over your system's audio landscape.
 
-## 🛠️ 技術スタック
-- **Frontend**: React 18 + Tailwind CSS (Vite)
-- **Backend**: Rust 1.93 + Tauri (v2)
-- **API**: `windows-rs` (Windows Core Audio APIs & Undocumented Audio Policy APIs)
-- **Visuals**: Mica/Acrylic Effects (`window-vibrancy`)
-- **Protocol**: Antigravity (Gemini-AI driven engineering)
+[**English**] | [**日本語**](#-日本語)
 
-## ⚙️ 開発環境のセットアップ
-Windowsでビルドするために、`Visual Studio Build Tools 18 (2022)` が必要です。
+---
 
-### 開発サーバの起動
-ビルド環境変数をロードして起動する必要があります：
-```powershell
-cmd /c "call ""C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\Auxiliary\Build\vcvarsall.bat"" x64 && cd /d %CD% && npm run tauri dev"
-```
+## ✨ Core Features
 
-## ✨ 主な機能
-- **アプリケーションごとの音量ミキシング**: 個別のアプリ音量をシームレスに操作。
-- **Per-App Audio Routing**: Windowsの非公開APIをハックし、アプリごとに異なる出力デバイスを割り当て可能。
-- **タスクトレイ常駐型フライアウトUI**: EarTrumpet風のクリック連動ポップアップ表示。
-- **Fluid UI Animation**: 下からスッと浮かび上がるフェードインアニメーション。
-- **インテリジェント配置**: タスクバーの位置（上下左右）やマルチモニター環境を自動検知し、常に最適な位置に吸着表示。
-- **動的アイコン抽出**: 実行ファイルからアプリアイコンと製品名を抽出し、直感的なUIを提供。
-- **Mica/Acrylic グラスモーフィズム**: Windows 11に最適化されたモダンなFluent Design。
-- **自動テスト環境**: Rust & React 両面でのユニットテストによる品質担保。
+### 💎 Fluid UX & Modern Design
+Experience a native-feeling interface with **Mica and Acrylic** effects, optimized for Windows 11. Our **Fluid UX** ensures 60fps animations and instant responsiveness, making audio management feel like a core part of the OS.
 
-## 🏗️ 開発ロードマップ
-1. [x] **Phase 1**: Tauri + React の基本構成とタスクトレイ常駐の実装。（2026-02-24 完了）
-2. [x] **Phase 2**: `windows-rs` を用いたオーディオセッションの列挙とボリューム制御ロジックの構築。（2026-02-25 完了）
-3. [x] **Phase 3**: UIのブラッシュアップとフロントエンドへのイベント同期。（2026-02-25 完了）
-4. [x] **Phase 4**: ネイティブUI体験の強化と非公開APIによるルーティング実装。（2026-04-21 完了）
-5. [x] **Phase 5**: 視覚的ブラッシュアップとセキュリティ・メモリ安全性の強化。（2026-04-22 完了）
-   - Fluent UI 3 (WinUI 3) 風スライダーとアニメーションの実装
-   - `PROPVARIANT` 等のメモリリーク修正とバリデーションの追加
-   - 自動テスト（Cargo / Vitest）の導入
-6. [ ] **Phase 6**: 高度なオーディオ機能（永続化）とパッケージング
+### ⚡ Real-time Pulse Engine
+Built on the **Antigravity Protocol**, our engine uses event-driven WASAPI (Windows Audio Session API) to synchronize volume states with zero polling. Feel the rhythm with **Real-time Peak Meters** providing instant visual feedback.
 
+### 📍 Intelligent Positioning
+Smart, taskbar-aware window placement. Whether your taskbar is top, bottom, left, or right, or you're using a multi-monitor setup, Antigravity Pulse intelligently snaps to the perfect position for instant access.
 
-## 📝 開発ログ (Antigravity)
-詳細な進捗や技術的な意思決定プロセスは [GEMINI.md](./gemini.md) を参照してください。
-🚀🎸エンジニアの熱意とAIの知性が融合した、最先端のオーディオコントロール体験をお届けします。
+### 🔀 Advanced Audio Routing
+Take command of your audio flow. Assign specific applications to different output devices (speakers, headphones, virtual cables) on the fly using our high-performance **Audio Policy Engine**.
+
+---
+
+## 🛠️ Technical Stack
+
+- **Backend**: Rust 1.93+ with **Tauri v2** for memory safety and native performance.
+- **Frontend**: React 19 + Tailwind CSS for a sleek, responsive interface.
+- **Engine**: Direct `windows-rs` integration for low-latency COM/Win32 interactions.
+- **Visuals**: Native Win32 transparency (Mica/Acrylic) via `window-vibrancy`.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- **Windows 10/11**
+- **Rust** (Latest stable)
+- **Node.js** (v18+)
+- **Visual Studio Build Tools 2022** (with C++ workload)
+
+### Installation & Development
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/charge0315/antigravity-pulse.git
+   cd antigravity-pulse
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Run in development mode:
+   ```bash
+   npm run tauri dev
+   ```
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions from the community! Check out our [CONTRIBUTING.md](./CONTRIBUTING.md) to get started. Let's build the future of audio together. 🎸
+
+---
+
+## ⭐ Support the Project
+
+If you find Antigravity Pulse useful, please consider giving us a star! It helps the project grow and motivates us to keep pushing the boundaries of what's possible.
+
+---
+
+## 🇯🇵 日本語
+
+**Antigravity Pulse** は、パフォーマンスと極上の操作性を追求した Windows 向け次世代オーディオコントロール・インターフェースです。Rust による高速なバックエンドと React によるモダンなフロントエンドを融合させ、システムオーディオの制御を再定義します。
+
+### 🌟 主な機能
+- **Fluid UX**: Windows 11 に最適化された Mica/Acrylic 効果と、60fps の滑らかなアニメーション。
+- **Real-time Pulse Engine**: ポーリングを排除したイベント駆動型アーキテクチャによる、遅延のない音量同期。
+- **インテリジェント配置**: タスクバーの位置やマルチモニター環境を自動認識し、常に最適な位置に表示。
+- **高度なルーティング**: アプリケーションごとに出力デバイス（スピーカー、ヘッドホン等）を瞬時に切り替え可能。
+
+### 🚀 開発の始め方
+`npm install` 後、`npm run tauri dev` で開発サーバーが起動します。ビルドには Rust と Visual Studio Build Tools 2022 が必要です。
+
+---
+
+MIT License © 2026 Mitsuhide / charge0315
