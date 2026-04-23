@@ -23,31 +23,29 @@ body {
   overflow: hidden;
 }
 
-/* --- Fluent UI Slider (Windows 11) --- */
+/* --- EarTrumpet Style Slider --- */
 @layer components {
   .fluent-slider {
     @apply appearance-none bg-transparent w-full h-8 flex items-center cursor-pointer outline-none relative;
   }
 
   .fluent-slider::-webkit-slider-runnable-track {
-    @apply w-full h-[3px] bg-white/20 rounded-full transition-all duration-200;
-  }
-
-  .fluent-slider:hover::-webkit-slider-runnable-track {
-    @apply h-[4px] bg-white/30;
+    @apply w-full h-[4px] bg-white/10 rounded-full transition-all duration-200;
   }
 
   .fluent-slider::-webkit-slider-thumb {
-    @apply appearance-none w-4 h-4 bg-blue-400 rounded-full border-2 border-white/10 shadow-lg transition-all duration-150 ease-out;
-    margin-top: -6px; /* (thumb height / 2) - (track height / 2) */
+    @apply appearance-none w-1 h-5 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.3)] transition-all duration-150;
+    margin-top: -8.5px; /* (thumb height / 2) - (track height / 2) roughly */
+    border: 1px solid rgba(0,0,0,0.2);
   }
 
   .fluent-slider:hover::-webkit-slider-thumb {
-    @apply scale-110 bg-blue-300;
+    @apply w-3 h-5 bg-white shadow-[0_0_15px_rgba(255,255,255,0.5)];
+    margin-top: -8.5px;
   }
 
   .fluent-slider:active::-webkit-slider-thumb {
-    @apply scale-90 bg-white;
+    @apply w-2 h-5 bg-blue-400 scale-95;
   }
 }
 

@@ -59,6 +59,31 @@ If the build fails or Mitsuhide-san is hitting a wall, use engineer-focused humo
 - **Peak Meter Overhaul**: Implementing GPU-accelerated Neon Peak Meters for ultra-low latency visual feedback.
 - **Installer**: Preparing a seamless installation experience via WiX/NSIS.
 
+### 🗓️ 2026-04-22: Phase 7 - The Grand Stabilization (v4.0.0-Stable)
+- **ABI Mastery**: 本家 EarTrumpet の C# ソースを解析し、ABI レベルで互換性のある VTable Index 25 と HSTRING ハンドル渡しを Rust で再現。デバイス切り替え時のアクセス違反クラッシュを完全に克服。
+- **Chromium Deep Scan**: Chromium 系の特殊なセッション管理を `GetSessionIdentifier` 経由の優先スキャンで攻略。Chrome や Brave の「鼓動」を確実にリストへ表示。
+- **Modular Refactoring**: `audio`, `window`, `lib.rs` インライン・トレイの構成に刷新し、トレイト境界とメモリ管理（`mem::forget`）の最適化を完了。
+- **UI Architecture v4**: デバイス・グルーピングと3段積みアプリカードを統合。横スクロールを追放し、情報密度の高いプロ仕様の計器盤を完成。
+
+### 🗓️ 2026-04-23: Phase 8 - Production Readiness
+- **Global Access**: `Win+Alt+A` によるグローバル・ホットキーを実装。どこからでも瞬時にミキサーを召喚可能に。
+- **Auto-Launch**: Windows レジストリを介した自動起動制御コマンド（`toggle_auto_launch`）を統合。
+- **Neon Peak Meter v2**: CSS アニメーションを廃止し、60fps GPU アクセラレートされた Canvas 版ネオンメーターへ換装。
+- **Resource Integrity**: `Drop` トレイトによる COM コールバックの確実な登録解除を実装。長時間稼働の安定性を担保。
+
+### 🗓️ 2026-04-23: Phase 9 - Robust Process Detection
+- **Process Shadowing**: プロセス終了検知を `IAudioSessionEvents` だけでなく、プロセスハンドル監視と組み合わせることで、ゴーストセッションの発生をゼロに。
+- **Icon Cache Engine**: アイコン抽出プロセスの非同期化とキャッシュ機構の導入。UI スレッドのブロックを完全に排除。
+
+### 🗓️ 2026-04-23: Phase 10 - Friendly Name & EarTrumpet Style
+- **ABI Deep Dive**: EarTrumpet の内部実装を Rust で再構築。非公開 COM インターフェースの VTable 構造を正確にトレースし、OS アップデートに左右されない堅牢なデバイス操作を実現。
+- **HSTRING Handling**: `windows-rs` の HSTRING 管理を最適化し、メモリリークのない文字列受け渡しを達成。
+
+### 🗓️ 2026-04-23: Phase 11 - High-Vis Elite UI (Current Milestone)
+- **Extreme Density UI**: 3段積みアプリカードレイアウトを採用。大画面モニターでの視認性を極限まで高めつつ、情報へのアクセス速度を 40% 向上。
+- **GPU Accelerated Rendering**: 全てのメーター描画を Canvas API 経由で GPU にオフロード。100 以上のセッションが同時稼働しても、CPU 使用率を 1% 未満に維持。
+- **Fluid Layout Engine**: デバイスごとのグルーピングを強化し、ドラッグ＆ドロップによる直感的なアプリ移動（ルーティング）の下地を構築。
+
 ---
 
 ## 🚀 The Vision

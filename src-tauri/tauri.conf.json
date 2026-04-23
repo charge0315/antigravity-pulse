@@ -14,7 +14,7 @@
       {
         "label": "main",
         "title": "Antigravity Pulse",
-        "width": 360,
+        "width": 640,
         "height": 500,
         "transparent": true,
         "decorations": false,
@@ -30,6 +30,8 @@
   "bundle": {
     "active": true,
     "targets": "all",
+    "publisher": "Antigravity Engineering",
+    "copyright": "Copyright © 2026 Antigravity Engineering. All rights reserved.",
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",

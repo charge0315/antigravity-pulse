@@ -18,21 +18,24 @@
 Experience a native-feeling interface with **Mica and Acrylic** effects, optimized for Windows 11. Our **Fluid UX** ensures 60fps animations and instant responsiveness, making audio management feel like a core part of the OS.
 
 ### ⚡ Real-time Pulse Engine
-Built on the **Antigravity Protocol**, our engine uses event-driven WASAPI (Windows Audio Session API) to synchronize volume states with zero polling. Feel the rhythm with **Real-time Peak Meters** providing instant visual feedback.
+Built on the **Antigravity Protocol**, our engine uses event-driven WASAPI (Windows Audio Session API) to synchronize volume states with zero polling. Feel the rhythm with **Neon Peak Meters v2**—GPU-accelerated Canvas rendering at **60fps** for ultra-smooth visual feedback with minimal CPU impact.
 
 ### 📍 Intelligent Positioning
-Smart, taskbar-aware window placement. Whether your taskbar is top, bottom, left, or right, or you're using a multi-monitor setup, Antigravity Pulse intelligently snaps to the perfect position for instant access.
+Smart, taskbar-aware window placement. Whether your taskbar is top, bottom, left, or right, or you're using a multi-monitor setup, Antigravity Pulse intelligently snaps to the perfect position. Plus, use the **Global Hotkey (`Win+Alt+A`)** to summon the mixer instantly from anywhere.
 
 ### 🔀 Advanced Audio Routing
-Take command of your audio flow. Assign specific applications to different output devices (speakers, headphones, virtual cables) on the fly using our high-performance **Audio Policy Engine**.
+Take command of your audio flow. Assign specific applications to different output devices (speakers, headphones, virtual cables) on the fly. Our engine utilizes a custom **ABI-compatible VTable interface** (matching pro-grade tools like EarTrumpet) to ensure rock-solid stability during device handovers.
+
+### 📊 High-Vis Elite UI
+Designed for power users. The **triple-stacked app card** layout maximizes information density without clutter, perfectly optimized for large monitors and complex audio setups.
 
 ---
 
 ## 🛠️ Technical Stack
 
 - **Backend**: Rust 1.93+ with **Tauri v2** for memory safety and native performance.
-- **Frontend**: React 19 + Tailwind CSS for a sleek, responsive interface.
-- **Engine**: Direct `windows-rs` integration for low-latency COM/Win32 interactions.
+- **Frontend**: React 19 + Tailwind CSS + **GPU-Accelerated Canvas** for fluid visual components.
+- **Engine**: Direct `windows-rs` integration with **ABI-level COM/Win32** mastery.
 - **Visuals**: Native Win32 transparency (Mica/Acrylic) via `window-vibrancy`.
 
 ---
@@ -80,9 +83,11 @@ If you find Antigravity Pulse useful, please consider giving us a star! It helps
 
 ### 🌟 主な機能
 - **Fluid UX**: Windows 11 に最適化された Mica/Acrylic 効果と、60fps の滑らかなアニメーション。
+- **Neon Peak Meter v2**: Canvas API と GPU 加速による超低負荷・高精度なビジュアルフィードバック。
 - **Real-time Pulse Engine**: ポーリングを排除したイベント駆動型アーキテクチャによる、遅延のない音量同期。
-- **インテリジェント配置**: タスクバーの位置やマルチモニター環境を自動認識し、常に最適な位置に表示。
-- **高度なルーティング**: アプリケーションごとに出力デバイス（スピーカー、ヘッドホン等）を瞬時に切り替え可能。
+- **インテリジェント配置**: `Win+Alt+A` のグローバル・ホットキー対応。タスクバー座標を自動認識し、常に最適な位置に表示。
+- **高度なルーティング**: ABI レベルで最適化されたデバイス切り替えエンジンにより、アプリごとの出力を瞬時かつ安定して変更可能。
+- **High-Vis Elite UI**: 3段積みアプリカードを採用した、大画面でも視認性の高いプロフェッショナルな計器盤。
 
 ### 🚀 開発の始め方
 `npm install` 後、`npm run tauri dev` で開発サーバーが起動します。ビルドには Rust と Visual Studio Build Tools 2022 が必要です。

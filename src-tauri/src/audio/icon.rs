@@ -12,10 +12,42 @@ use windows::{
             BITMAPINFOHEADER, BI_RGB, DIB_RGB_COLORS,
         },
         Storage::FileSystem::FILE_FLAGS_AND_ATTRIBUTES,
-        UI::Shell::{SHGetFileInfoW, SHFILEINFOW, SHGFI_ICON, SHGFI_LARGEICON},
+        UI::Shell::{SHGetFileInfoW, SHFILEINFOW, SHGFI_ICON, SHGFI_LARGEICON, SHGFI_DISPLAYNAME},
         UI::WindowsAndMessaging::{DestroyIcon, GetIconInfo, HICON},
     },
 };
+
+/// 実行ファイルのパスからシステムの表示名を取得する
+pub fn extract_display_name(executable_path: &str) -> Option<String> {
+    let mut path_wide: Vec<u16> = OsStr::new(executable_path).encode_wide().collect();
+    path_wide.push(0);
+
+    let mut shfi: SHFILEINFOW = unsafe { std::mem::zeroed() };
+    let result = unsafe {
+        SHGetFileInfoW(
+            PCWSTR(path_wide.as_ptr()),
+            FILE_FLAGS_AND_ATTRIBUTES(0),
+            Some(&mut shfi),
+            std::mem::size_of::<SHFILEINFOW>() as u32,
+            SHGFI_DISPLAYNAME,
+        )
+    };
+
+    if result == 0 {
+        return None;
+    }
+
+    let name = unsafe {
+        let ptr = shfi.szDisplayName.as_ptr();
+        let mut len = 0;
+        while *ptr.add(len) != 0 {
+            len += 1;
+        }
+        String::from_utf16_lossy(std::slice::from_raw_parts(ptr, len))
+    };
+
+    if name.is_empty() { None } else { Some(name) }
+}
 
 /// 実行ファイルのパスからアプリアイコンを抽出し、Base64文字列で返す
 pub fn extract_icon_base64(executable_path: &str) -> Option<String> {

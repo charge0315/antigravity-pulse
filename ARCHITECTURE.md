@@ -28,6 +28,7 @@ Handles native OS interactions, COM component management, and low-level window m
     - **`events.rs`**: Implements the **Real-time Pulse Engine** via COM callbacks, pushing volume updates to the frontend without polling.
     - **`icon.rs`**: Dynamically extracts high-quality application icons from process binaries using `SHGetFileInfoW`.
     - **`policy.rs`**: Maps advanced Audio Policy interfaces for per-app output routing.
+      - **ABI Compatibility**: Overcomes Windows 11 internal API changes by mapping **VTable Index 25** and handling **HSTRING** descriptors, ensuring parity with professional tools like EarTrumpet.
 
 ---
 
@@ -36,6 +37,7 @@ Handles native OS interactions, COM component management, and low-level window m
 1. **Fluid UX (Zero Latency)**: Every interaction should feel instant. We prioritize backend performance and frontend responsiveness above all.
 2. **Native Synergy**: Antigravity Pulse is designed to feel like a native extension of Windows 11, utilizing Fluent Design and Mica/Acrylic effects.
 3. **Event-Driven Architecture**: By using COM callbacks instead of periodic polling, we minimize CPU overhead and maximize real-time accuracy.
+4. **GPU-Accelerated Visuals**: Peak meters are rendered using the **Canvas API at 60fps**, offloading drawing operations to the GPU to ensure zero impact on CPU-bound audio processing.
 
 ---
 
@@ -45,8 +47,10 @@ Handles native OS interactions, COM component management, and low-level window m
 
 ### 📁 ディレクトリ構成
 - **フロントエンド (`src/`)**: React 19 を使用。**楽観的UI更新**により、操作の「もたつき」を徹底的に排除しています。
+  - **Neon Peak Meter**: Canvas API による 60fps GPU 描画を実装。
 - **バックエンド (`src-tauri/`)**: Rust と `windows-rs` を活用し、OS ネイティブの強力な API 呼び出しを担当。
   - **Real-time Pulse Engine**: `events.rs` にて COM コールバックを処理し、プッシュ型で音量状態を同期します。
+  - **ABI Mastery**: 非公開 API の VTable インデックス 25 を直接指定し、OS 標準ミキサーを超える柔軟なデバイス制御を実現。
   - **Mica/Acrylic**: Windows 11 の最新デザイン言語に準拠した透明エフェクトを適用。
 
 ### 💡 設計思想
